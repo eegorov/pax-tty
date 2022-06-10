@@ -6,18 +6,5 @@ INSTALL_DIR:=/lib/modules/$(KERNEL_VER)/ttyPos
 obj-m := ttyPos.o
 
 
-all:
-	$(MAKE) modules -C $(KERNEL_DIR) M=$(shell pwd)
-
-clean:
-	$(RM) *.o *.ko *.mod.* .*.cmd *~
-	$(RM) -r .tmp_versions
-	$(RM) *.order *.symvers
-install: all
-	install -D -m 644 ttyPos.ko $(INSTALL_DIR)/ttyPos.ko
-	/sbin/depmod -a
-uninstall:
-	modprobe -r ttyPos ; echo -n
-	$(RM) $(INSTALL_DIR)/ttyPos.ko
-	/sbin/depmod -a
-
+modules modules_install clean:
+	$(MAKE) -C $(KERNEL_DIR) M=$(shell pwd) $@

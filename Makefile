@@ -7,7 +7,7 @@ obj-m := ttyPos.o
 
 
 all:
-	$(MAKE) modules -C $(KERNEL_DIR) SUBDIRS=$(shell pwd)
+	$(MAKE) modules -C $(KERNEL_DIR) M=$(shell pwd)
 
 clean:
 	$(RM) *.o *.ko *.mod.* .*.cmd *~

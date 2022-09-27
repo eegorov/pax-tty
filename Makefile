@@ -1,5 +1,5 @@
 
-KERNEL_VER:=$(shell uname -r)
+KERNEL_VER:=$(shell pushd /usr/src/linux > /dev/null ; make kernelrelease ; popd > /dev/null)
 KERNEL_DIR:=/lib/modules/$(KERNEL_VER)/build
 INSTALL_DIR:=/lib/modules/$(KERNEL_VER)/ttyPos
 

@@ -1,10 +1,13 @@
 
-KERNEL_VER:=$(shell pushd /usr/src/linux > /dev/null ; make kernelrelease ; popd > /dev/null)
-KERNEL_DIR:=/lib/modules/$(KERNEL_VER)/build
-INSTALL_DIR:=/lib/modules/$(KERNEL_VER)/ttyPos
+KERNELRELEASE ?= $(shell uname -r)
+KDIR ?= /lib/modules/$(KERNELRELEASE)/build
+PWD ?= $(shell pwd)
 
 obj-m := ttyPos.o
 
+default: modules
+install: modules_install
 
 modules modules_install clean:
-	$(MAKE) -C $(KERNEL_DIR) M=$(shell pwd) $@
+	$(MAKE) -C $(KDIR) M=$(PWD) $@
+

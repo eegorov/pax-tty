@@ -1006,7 +1006,10 @@ static int pos_ioctl(struct tty_struct *tty, unsigned int cmd,
 #define RELEVANT_IFLAG(iflag) \
 	((iflag) & (IGNBRK | BRKINT | IGNPAR | PARMRK | INPCK))
 
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,16))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,1,0))
+static void pos_set_termios(struct tty_struct *tty,
+    const struct ktermios *old_termios)
+#elif (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,16))
 static void pos_set_termios(struct tty_struct *tty,
     struct ktermios *old_termios)
 #else

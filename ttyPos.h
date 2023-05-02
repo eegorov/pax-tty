@@ -11,22 +11,30 @@
 #include <linux/tty_driver.h>
 #include <linux/tty_flip.h>
 #include <linux/kref.h>
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,16))
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,18))
 #include <linux/uaccess.h>
 #endif
 #include <linux/usb.h>
 #include <linux/mutex.h>
 #include <linux/time.h>
 #include <linux/sched.h>
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,12,0))
+
 #include <linux/err.h>
 #include <linux/kthread.h>
-#endif
+
 #define USB_VENDOR_ID		0x1234
 #define USB_PRODUCT_ID		0x0101
 
+#define USB_NEW_VENDOR_ID		0x2FB8
+#define PROLIN_PRODUCT_ID		0x1101
+#define PROLIN_DOUBLE_PRODUCT_ID		0x110B
+#define MONITOR_PRODUCT_ID		0x0101
+
 static struct usb_device_id pos_usb_table[] = {
 	{ USB_DEVICE(USB_VENDOR_ID, USB_PRODUCT_ID) },
+	{ USB_DEVICE(USB_NEW_VENDOR_ID, PROLIN_PRODUCT_ID) },
+	{ USB_DEVICE(USB_NEW_VENDOR_ID, MONITOR_PRODUCT_ID) },
+	{ USB_DEVICE(USB_NEW_VENDOR_ID, PROLIN_DOUBLE_PRODUCT_ID) 	},
 	{},
 };
 
@@ -38,9 +46,9 @@ MODULE_DEVICE_TABLE(usb,pos_usb_table);
 #define THREAD_INIT		0x00
 #define THREAD_STOPPED		0x01
 #define THREAD_RUNNING		0x82
-#define THREAD_CLOSE		0x83
-#define THREAD_QUERY_WAIT	0x84
-#define THREAD_WAIT			0x85
+//#define THREAD_CLOSE		0x83
+//#define THREAD_QUERY_WAIT	0x84
+//#define THREAD_WAIT			0x85
 
 #define THREAD_IS_RUNNING(ThreadState)	(ThreadState & 0x80)
 
@@ -101,7 +109,6 @@ struct tty_pos {
 
 	wait_queue_head_t write_wait;
 	atomic_t write_flag;
-	wait_queue_head_t resume_wait;
 
 	__u8 bulk_in_epAddr;
 	__u8 bulk_out_epAddr;

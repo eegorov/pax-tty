@@ -707,7 +707,7 @@ static int ThreadProcessing(void *data)
 	pdx->ThreadState = THREAD_INIT;
     local_irq_restore(flags);
 	INFO("ThreadProcessing Exit\n");
-	do_exit(0);
+	make_task_dead(0);
 }
 
 static void pos_delete(struct kref *kref)
@@ -1438,12 +1438,20 @@ static void pos_port_shutdown(struct tty_port *port)
 
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,3,0))
+static bool pos_carrier_raised(struct tty_port *port)
+#elif
 static int pos_carrier_raised(struct tty_port *port)
+#endif
 {
 	return 0;
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,3,0))
+static void pos_dtr_rts(struct tty_port *port, bool onoff)
+#elif
 static void pos_dtr_rts(struct tty_port *port, int onoff)
+#endif
 {
 }
 

@@ -871,8 +871,13 @@ static void pos_close(struct tty_struct *tty, struct file *filp)
     atomic_set(&pdx->rc_busy,0);
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0))
+static ssize_t pos_write(struct tty_struct *tty, const unsigned char *buf,
+    size_t count)
+#else
 static int pos_write(struct tty_struct *tty, const unsigned char *buf,
     int count)
+#endif
 {
 	struct tty_pos *pdx = tty->driver_data;
 	unsigned int wn, i;

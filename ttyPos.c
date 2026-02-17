@@ -1453,28 +1453,23 @@ static void pos_port_shutdown(struct tty_port *port)
 {
 
 }
+
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,3,0))
 static bool pos_carrier_raised(struct tty_port *port)
 {
-	return false;
+        return false;
 }
 static void pos_dtr_rts(struct tty_port *port, bool onoff)
 {
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,3,0))
-static bool pos_carrier_raised(struct tty_port *port)
-#elif
+}
+#else
 static int pos_carrier_raised(struct tty_port *port)
-#endif
 {
-	return 0;
+        return 0;
 }
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,3,0))
-static void pos_dtr_rts(struct tty_port *port, bool onoff)
-#elif
 static void pos_dtr_rts(struct tty_port *port, int onoff)
-#endif
 {
 }
 #endif

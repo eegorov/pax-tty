@@ -1,5 +1,4 @@
 #include "ttyPos.h"
-#include <linux/task_work.h>
 
 #define DRV_VERSION	"317"
 #define VERSION_DATE    "2024.06.25_01"
@@ -327,7 +326,11 @@ static int ThreadProcessing(void *data)
 
 	if(pdx==NULL)
 	{
-		make_task_dead(0);
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,17,0))
+		return -EINVAL;
+#else
+		do_exit(0);
+#endif
 	}
 	
 	tty = pdx->tty;
@@ -707,7 +710,11 @@ static int ThreadProcessing(void *data)
 	pdx->ThreadState = THREAD_INIT;
     local_irq_restore(flags);
 	INFO("ThreadProcessing Exit\n");
-	make_task_dead(0);
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,17,0))
+	return 0;
+#else
+	do_exit(0);
+#endif
 }
 
 static void pos_delete(struct kref *kref)

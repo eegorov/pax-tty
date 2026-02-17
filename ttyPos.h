@@ -28,13 +28,16 @@
 #define USB_NEW_VENDOR_ID		0x2FB8
 #define PROLIN_PRODUCT_ID		0x1101
 #define PROLIN_DOUBLE_PRODUCT_ID		0x110B
+#define PROLIN_HID_COMPOSITE_PRODUCT_ID 0x110E
 #define MONITOR_PRODUCT_ID		0x0101
+
 
 static struct usb_device_id pos_usb_table[] = {
 	{ USB_DEVICE(USB_VENDOR_ID, USB_PRODUCT_ID) },
 	{ USB_DEVICE(USB_NEW_VENDOR_ID, PROLIN_PRODUCT_ID) },
-	{ USB_DEVICE(USB_NEW_VENDOR_ID, MONITOR_PRODUCT_ID) },
+	{ USB_DEVICE(USB_NEW_VENDOR_ID, MONITOR_PRODUCT_ID) 	},
 	{ USB_DEVICE(USB_NEW_VENDOR_ID, PROLIN_DOUBLE_PRODUCT_ID) 	},
+	{ USB_DEVICE(USB_NEW_VENDOR_ID, PROLIN_HID_COMPOSITE_PRODUCT_ID) 	},
 	{},
 };
 
@@ -66,7 +69,7 @@ MODULE_DEVICE_TABLE(usb,pos_usb_table);
 #define MAX_DATA        65532
 #endif
 
-#define MAX_TRANSFER_SIZE 512
+//#define MAX_TRANSFER_SIZE 512
 
 typedef struct _POOL {
 	volatile unsigned int ReadPos;
@@ -123,6 +126,7 @@ struct tty_pos {
 
 	volatile POOL TxPool;
     unsigned short maxdata;
+	unsigned short max_transfer_size;
 };
 
 #define to_pos_dev(d)		container_of(d, struct tty_pos, kref)

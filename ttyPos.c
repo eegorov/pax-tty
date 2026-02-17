@@ -874,7 +874,6 @@ static void pos_close(struct tty_struct *tty, struct file *filp)
     	
     atomic_set(&pdx->rc_busy,0);
 }
-
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0))
 static ssize_t pos_write(struct tty_struct *tty, const u8 *buf, size_t count)
 #else
@@ -972,7 +971,6 @@ static int pos_ioctl(struct tty_struct *tty, unsigned int cmd,
 
 #define RELEVANT_IFLAG(iflag) \
 	((iflag) & (IGNBRK | BRKINT | IGNPAR | PARMRK | INPCK))
-
 #if (LINUX_VERSION_CODE > KERNEL_VERSION(6,1,0))
 static void pos_set_termios(struct tty_struct *tty,
     const struct ktermios *old_termios)
@@ -1460,20 +1458,20 @@ static void pos_port_shutdown(struct tty_port *port)
 {
 
 }
-
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,3,0))
 static bool pos_carrier_raised(struct tty_port *port)
 {
-        return false;
+	return false;
 }
 static void pos_dtr_rts(struct tty_port *port, bool onoff)
 {
 
 }
+
 #else
 static int pos_carrier_raised(struct tty_port *port)
 {
-        return 0;
+	return 0;
 }
 
 static void pos_dtr_rts(struct tty_port *port, int onoff)
